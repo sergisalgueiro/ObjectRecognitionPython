@@ -1,6 +1,14 @@
 import numpy as np
 import cv2
 
+def normalizeHSV(rawHSV):
+	# For HSV, Hue range is [0,179], Saturation range is [0,255] and Value range is [0,255].
+	normalized = np.empty(rawHSV.shape)
+	normalized[:,:,0] = rawHSV[:,:,0]/179.0
+	normalized[:,:,1] = rawHSV[:,:,1]/255.0
+	normalized[:,:,2] = rawHSV[:,:,2]/255.0
+	return normalized
+
 def hist3d(img, intervals):
 	space = np.linspace(0,1,intervals+1)
 	h3d = np.zeros((intervals,intervals,intervals))

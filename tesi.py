@@ -15,17 +15,17 @@ print 'Original image ' + str(image.shape) + ' -> Resized by 1/5 ->  ' + 'Resize
 
 # Convert Image to HSV colorspace
 imreshsv = cv2.cvtColor(imres,cv2.COLOR_BGR2HSV)
+normimreshsv = util.normalizeHSV(imreshsv)
 #cv2.imshow('HSVimg',imreshsv)
 #cv2.waitKey(0)
 #cv2.destroyWindow('HSVimg')
 
 #Create 4D histogram
-H = np.array(imreshsv[:,:,0]).ravel()
-S = np.array(imreshsv[:,:,1]).ravel()
-V = np.array(imreshsv[:,:,2]).ravel()
+H = np.array(normimreshsv[:,:,0]).ravel()
+S = np.array(normimreshsv[:,:,1]).ravel()
+V = np.array(normimreshsv[:,:,2]).ravel()
 
-h3d = util.hist3d(imreshsv,25)
-print h3d
+h3d = util.hist3d(normimreshsv,25)
 # Seeding
 peaks3d = util.findPeak4D(h3d,1)
 print 'End of program'
