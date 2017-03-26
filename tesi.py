@@ -5,7 +5,7 @@ import cv2
 import funcutils as util
 
 # Import image 
-image = cv2.imread('/home/pi/Documents/runtb/p1.bmp')
+image = cv2.imread('/home/pi/Documents/tesi/runtb/p1.bmp')
 # Resize image
 imres = cv2.resize(image,None,fx=0.2,fy=0.2,interpolation = cv2.INTER_CUBIC)
 #cv2.imshow('img',imres)
