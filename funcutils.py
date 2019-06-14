@@ -65,11 +65,11 @@ def findPeak4D(h3d, width):
 def peakMask(peaks3d, clustThresh):
 	count = 0
 	peaks = peaks3d[peaks3d[:,3].argsort()[::-1]]
-	print 'peaks'
-	print peaks
+	print(peaks)
+	print(peaks)
 	while True:
 		if count == 0:
-			peakMask = np.ones(peaks3d.shape[0], dtype = bool)
+			peakMask = np.ones(peaks3d.shape[0], dtype=bool)
 		# else:
 			# peakMask = peaks3d[:, 1] > (coords(1, 1) + 1) | peaks3d[:, 1] < (coords(1, 1) - 1) & ...
    #                 peaks3d[:, 2] > (coords(1, 2) + 1) | peaks3d[:, 2] < (coords(1, 2) - 1) & ...
@@ -78,10 +78,11 @@ def peakMask(peaks3d, clustThresh):
 		clustVal = newpeaks[:,3].max()
 		if clustVal < clustThresh:
 			break
-		coords = newpeaks[0,:3]#si el primer es el mes alt...
-		print 'coords'
-		print coords
-		clustCoords = np.vstack((clustCoords,coords))
+		coords = newpeaks[0, :3] #s i el primer es el mes alt...
+		print('coords')
+		print(coords)
+		clustCoords = np.ndarray([])
+		clustCoords = np.vstack((clustCoords, coords))
 		oldMask = peakMask
 		oldClustVal = clustVal
 		count += 1
