@@ -63,6 +63,9 @@ def main(color_space):
     cv2.imshow('Img', plt_img)
     cv2.waitKey(0)
     cv2.destroyWindow('Img')
+	#lower_green = np.array([65,60,60])
+	#upper_green = np.array([80,255,255])
+	#mask = cv2.inRange(hsv, lower_green, upper_green)
 
 
 if __name__ == "__main__":
