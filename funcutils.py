@@ -45,13 +45,13 @@ def scatter_image(image):
 
 
 def hist3d(img, intervals):
-	space = np.linspace(0,1,intervals+1)
-	h3d = np.zeros((intervals,intervals,intervals))
+	space = np.linspace(0, 1, intervals+1)
+	h3d = np.zeros((intervals, intervals, intervals))
 	for n in range(img.shape[0]):
 		for m in range(img.shape[1]):
-			tmpVal1 = img[n,m,0]
-			tmpVal2 = img[n,m,1]
-			tmpVal3 = img[n,m,2]
+			tmpVal1 = img[n, m, 0]
+			tmpVal2 = img[n, m, 1]
+			tmpVal3 = img[n, m, 2]
 			idxVal1 = 0
 			idxVal2 = 0
 			idxVal3 = 0
@@ -82,20 +82,21 @@ def hist3d(img, intervals):
 					if ((tmpVal3 >= space[i]) and (tmpVal3 < space[i+1])):
 						idxVal3 = i
 						break
-			h3d[idxVal1,idxVal2,idxVal3] = h3d[idxVal1,idxVal2,idxVal3] + 1
+			h3d[idxVal1, idxVal2, idxVal3] = h3d[idxVal1, idxVal2, idxVal3] + 1
 	return h3d
 
 
 def findPeak4D(h3d, width):
     peaks = np.empty((0,4),int)
-    for i in range(width,h3d.shape[0]-width):
-        for j in range(width,h3d.shape[1]-width):
-            for k in range(width,h3d.shape[2]-width):
-                pattern = h3d[i-width:i+width+1,j-width:j+width+1,k-width:k+width+1]
-                val = 6*pattern[1,1,1] - pattern[1,1,0] - pattern[1,1,2] - pattern[0,1,1] - pattern[1,0,1] -pattern[1,2,1] - pattern[2,1,1]
+    for i in range(width, h3d.shape[0]-width):
+        for j in range(width, h3d.shape[1]-width):
+            for k in range(width, h3d.shape[2]-width):
+                pattern = h3d[i-width:i+width+1, j-width:j+width+1, k-width:k+width+1]
+                val = 6*pattern[1, 1, 1] - pattern[1, 1, 0] - pattern[1, 1, 2] - pattern[0, 1, 1] - pattern[1, 0, 1] \
+					  - pattern[1 ,2, 1] - pattern[2, 1, 1]
                 # Afegir que el valor maxim sigui al pla mitj
-                if val>0:
-                    peaks = np.vstack((peaks,[i,j,k,val]))
+                if val > 0:
+                    peaks = np.vstack((peaks, [i, j, k, val]))
     return peaks
 
 
@@ -145,3 +146,10 @@ def close_open(img, kernel_size):
 	img_co = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
 	img_co = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
 	return img_co
+
+
+def in_range(clusters, lower, upper):
+	res = np.logical_and(np.logical_and(lower[0] <= clusters[:, 0],  clusters[:, 0] <= upper[0]),
+						 np.logical_and(lower[1] <= clusters[:, 1],  clusters[:, 1] <= upper[1]),
+						 np.logical_and(lower[2] <= clusters[:, 2],  clusters[:, 2] <= upper[2]))
+	return res
