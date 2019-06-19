@@ -98,12 +98,13 @@ def morphological_operations(img_binary, hsv_img, plot=False):
     # Open/close operation
     kernel_size = 3
     img_oc = util.open_close(img_binary, kernel_size)
-    img_co = util.close_open(img_oc, kernel_size*2)
+    # img_co = util.close_open(img_oc, kernel_size*2)
     if plot:
-        plt.imshow(img_co)
+        # fig, (ax1, ax2) = plt.subplots(1, 2)
+        plt.imshow(img_oc)
         plt.show()
     # Check for connected components ang get bounding box
-    nlabels, labels, stats, centroids = cv2.connectedComponentsWithStats(img_co)
+    nlabels, labels, stats, centroids = cv2.connectedComponentsWithStats(img_oc)
     if len(stats) < 2:
         return None
     area_value_kernel = np.sort(stats[:, cv2.CC_STAT_AREA])[-2]
@@ -127,7 +128,7 @@ def get_green_bounding_box(path_to_img, size=(224, 224), mode='adaptive'):
         bin_im = adaptive_clustering(im_hsv, 25, 5, False)
     else:
         raise LookupError("Mode not supported")
-    bbox = morphological_operations(bin_im, im_hsv, False)
+    bbox = morphological_operations(bin_im, im_hsv, True)
     return bbox
 
 

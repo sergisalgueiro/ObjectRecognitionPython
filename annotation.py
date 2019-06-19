@@ -19,7 +19,7 @@ def main(route_folder, im_size=(224, 224)):
             # Add image information to dataFrame
             df = df.append({'CategoryName': category, 'FileName': image, 'CategoryId': idx, 'BBox': bbox,
                             'BBoxYolo': bbox_yolo}, ignore_index=True)
-    print(df)
+    df.to_csv('C:/ObjectRecognitionPython/df.csv', encoding='utf-8')
 
 
 if __name__ == "__main__":

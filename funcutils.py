@@ -139,14 +139,14 @@ def erosion(img, kernel_size, iterations):
 def open_close(img, kernel_size):
 	kernel = np.ones((kernel_size, kernel_size), np.uint8)
 	img_oc = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
-	img_oc = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
+	img_oc = cv2.morphologyEx(img_oc, cv2.MORPH_OPEN, kernel)
 	return img_oc
 
 
 def close_open(img, kernel_size):
 	kernel = np.ones((kernel_size, kernel_size), np.uint8)
 	img_co = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
-	img_co = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
+	img_co = cv2.morphologyEx(img_co, cv2.MORPH_CLOSE, kernel)
 	return img_co
 
 
@@ -157,13 +157,6 @@ def in_range(clusters, lower, upper):
 	return res
 
 
-# class Annotate:
-# 	def __init__(self, route_folder, an_format='Yolo'):
-# 		self.route_folder = route_folder
-# 		self.an_format = an_format
-# 		self.categories_names = self.get_categories(route_folder)
-
-	# @staticmethod
 def yolo_format_box(image_size, bbox, margin=3):
 
 	if bbox is None:
@@ -179,7 +172,6 @@ def yolo_format_box(image_size, bbox, margin=3):
 	return x, y, w, h
 
 
-# @staticmethod
 def get_categories(route_folder):
 	if os.path.exists(route_folder):
 		if not os.listdir(route_folder):
