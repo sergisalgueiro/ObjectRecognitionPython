@@ -3,6 +3,8 @@ import cv2
 import matplotlib.pyplot as plt
 from matplotlib import colors
 from mpl_toolkits.mplot3d import Axes3D
+import os
+import imghdr
 
 
 def normalizeHSV(rawHSV):
@@ -153,3 +155,54 @@ def in_range(clusters, lower, upper):
 						 np.logical_and(lower[1] <= clusters[:, 1],  clusters[:, 1] <= upper[1]),
 						 np.logical_and(lower[2] <= clusters[:, 2],  clusters[:, 2] <= upper[2]))
 	return res
+
+
+# class Annotate:
+# 	def __init__(self, route_folder, an_format='Yolo'):
+# 		self.route_folder = route_folder
+# 		self.an_format = an_format
+# 		self.categories_names = self.get_categories(route_folder)
+
+	# @staticmethod
+def yolo_format_box(image_size, bbox, margin=3):
+
+	if bbox is None:
+		return None
+	dw = 1. / image_size[0]
+	dh = 1. / image_size[1]
+	x_center = (bbox[cv2.CC_STAT_LEFT] * 2 + bbox[cv2.CC_STAT_WIDTH]) / 2.0
+	y_center = (bbox[cv2.CC_STAT_TOP] * 2 + bbox[cv2.CC_STAT_HEIGHT]) / 2.0
+	x = x_center * dw
+	w = bbox[cv2.CC_STAT_WIDTH] * dw
+	y = y_center * dh
+	h = bbox[cv2.CC_STAT_HEIGHT] * dh
+	return x, y, w, h
+
+
+# @staticmethod
+def get_categories(route_folder):
+	if os.path.exists(route_folder):
+		if not os.listdir(route_folder):
+			print('Folder is empty, no categories inside: {}'.format(route_folder))
+			exit(1)
+		else:
+			category_dirs = []
+			for entry in os.listdir(route_folder):
+				if os.path.isdir(os.path.join(route_folder, entry)):
+					category_dirs.append(entry)
+			return category_dirs
+	else:
+		print('Path does not exist: {}'.format(route_folder))
+		exit(1)
+
+
+def get_category_images_list(route_to_folder, category_name):
+	route = os.path.join(route_to_folder, category_name)
+	category_imgs = []
+	if not os.listdir(route):
+		print('Folder is empty, no category images: {}'.format(route))
+	else:
+		for entry in os.listdir(route):
+			if imghdr.what(os.path.join(route, entry)) is not None:
+				category_imgs.append(entry)
+	return category_imgs
