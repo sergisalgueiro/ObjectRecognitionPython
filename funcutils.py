@@ -104,29 +104,28 @@ def findPeak4D(h3d, width):
 
 def peakMask(peaks3d, clustThresh):
 	count = 0
-	peaks = peaks3d[peaks3d[:,3].argsort()[::-1]]
-	print(peaks)
-	print(peaks)
+	# Sort in  descending order
+	peaks = peaks3d[peaks3d[:, 3].argsort()[::-1]]
 	while True:
 		if count == 0:
-			peakMask = np.ones(peaks3d.shape[0], dtype=bool)
-		# else:
-			# peakMask = peaks3d[:, 1] > (coords(1, 1) + 1) | peaks3d[:, 1] < (coords(1, 1) - 1) & ...
-   #                 peaks3d[:, 2] > (coords(1, 2) + 1) | peaks3d[:, 2] < (coords(1, 2) - 1) & ...
-   #                 peaks3d[:, 3] > (coords(1, 3) + 1) | peaks3d[:, 3] < (coords(1, 3) - 1);
-		newpeaks = peaks3d[peakMask, :]
-		clustVal = newpeaks[:,3].max()
+			peakMask = np.ones(peaks.shape[0], dtype=bool)
+		else:
+			peakMask = np.bitwise_or(np.bitwise_or(peaks[:, 0] > (coords[0] + 1), peaks[:, 0] < (coords[0] - 1)),
+									 np.bitwise_or(peaks[:, 1] > (coords[1] + 1), peaks[:, 1] < (coords[1] - 1)),
+									 np.bitwise_or(peaks[:, 2] > (coords[2] + 1), peaks[:, 2] < (coords[2] - 1)))
+			peakMask = np.bitwise_and(peakMask, oldMask)
+		newpeaks = peaks[peakMask, :]
+		clustVal = newpeaks[:, 3].max()
 		if clustVal < clustThresh:
 			break
-		coords = newpeaks[0, :3] #s i el primer es el mes alt...
-		print('coords')
-		print(coords)
-		clustCoords = np.ndarray([])
-		clustCoords = np.vstack((clustCoords, coords))
+		coords = newpeaks[0, :3]  # s i el primer es el mes alt...
+		if count == 0:
+			clustCoords = coords
+		else:
+			clustCoords = np.vstack((clustCoords, coords))
 		oldMask = peakMask
 		oldClustVal = clustVal
 		count += 1
-		break
 	return clustCoords
 
 

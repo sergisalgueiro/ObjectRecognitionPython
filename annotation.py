@@ -3,9 +3,11 @@ import pandas as pd
 import os
 import funcutils as util
 from segmentation import get_green_bounding_box as getbb
+import time
 
 
 def main(route_folder, im_size=(224, 224)):
+    t = time.process_time()
     # Create DataFrame
     df = pd.DataFrame(columns=['CategoryName', 'FileName', 'CategoryId', 'BBox', 'BBoxYolo'])
     # get categories from route folder
@@ -20,6 +22,8 @@ def main(route_folder, im_size=(224, 224)):
             df = df.append({'CategoryName': category, 'FileName': image, 'CategoryId': idx, 'BBox': bbox,
                             'BBoxYolo': bbox_yolo}, ignore_index=True)
     df.to_csv('C:/ObjectRecognitionPython/df.csv', encoding='utf-8')
+    elapsed_time = time.process_time() - t
+    print('Elapsed time: {} s.'.fomat(elapsed_time))
 
 
 if __name__ == "__main__":

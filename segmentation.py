@@ -33,9 +33,9 @@ def adaptive_clustering(hsv_img, num_bins, width, plot=False):
     im_norm = util.normalizeHSV(hsv_img)
     h3d = util.hist3d(im_norm, num_bins)
     p4d = util.findPeak4D(h3d, width)
-
+    peaks_center = util.peakMask(p4d, 40)
     # K-MEANS clustering
-    k = len(p4d)
+    k = len(peaks_center)
     assert k != 0
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
     # Sort every channel in a single column
@@ -128,7 +128,7 @@ def get_green_bounding_box(path_to_img, size=(224, 224), mode='adaptive'):
         bin_im = adaptive_clustering(im_hsv, 25, 5, False)
     else:
         raise LookupError("Mode not supported")
-    bbox = morphological_operations(bin_im, im_hsv, True)
+    bbox = morphological_operations(bin_im, im_hsv, False)
     return bbox
 
 
